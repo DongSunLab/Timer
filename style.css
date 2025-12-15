@@ -357,7 +357,7 @@ html {
 }
 
 .info-label {
-    font-size: 0.9rem;
+    font-size: 1.3rem;
     color: var(--text-secondary);
     font-weight: 600;
     margin-bottom: 0.2rem;
@@ -457,3 +457,4 @@ html {
     border-radius: 4px;
 
 }
+
