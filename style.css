@@ -366,7 +366,7 @@ html {
 }
 
 .info-value {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--text-primary);
 }
@@ -427,7 +427,7 @@ html {
 }
 
 .auto-bullet-list li {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--text-primary);
     line-height: 1.3;
