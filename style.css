@@ -366,7 +366,7 @@ html {
 }
 
 .info-value {
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     font-weight: 700;
     color: var(--text-primary);
 }
@@ -455,4 +455,5 @@ html {
 .notice-content::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 4px;
+
 }
