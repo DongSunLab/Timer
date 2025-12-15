@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     circle.style.strokeDashoffset = 0;
 
     // Load notices from localStorage
-    const savedNotices = localStorage.getItem('timer_notices_v6');
+    const savedNotices = localStorage.getItem('timer_notices_v8');
     if (savedNotices) {
         noticeBoard.innerHTML = savedNotices;
     }
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Save notices on input
     noticeBoard.addEventListener('input', () => {
-        localStorage.setItem('timer_notices_v6', noticeBoard.innerHTML);
+        localStorage.setItem('timer_notices_v8', noticeBoard.innerHTML);
     });
 
     // Reset Notice Button
@@ -157,49 +157,71 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p class="main-title">2027 이동선T 미적분 정규반</p>
                     <p class="sub-title">시즌1 2주차</p>
                     
-                    <div class="exam-card">
-                        <div class="info-row">
-                            <div class="info-icon">📝</div>
-                            <div class="text-group">
-                                <span class="info-label">시험명</span>
-                                <span class="info-value">미적분 TEST 1주차</span>
+                    <div class="cards-row">
+                        <div class="exam-card">
+                            <div class="info-row">
+                                <div class="info-icon">📝</div>
+                                <div class="text-group">
+                                    <span class="info-label">시험명</span>
+                                    <span class="info-value">미적분 TEST 1주차</span>
+                                </div>
+                            </div>
+                            <div class="card-divider"></div>
+                            <div class="info-row">
+                                <div class="info-icon">⏰</div>
+                                <div class="text-group">
+                                    <span class="info-label">시험시간</span>
+                                    <span class="info-value">30분 (오후 6:00 ~ 오후 6:30)</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="card-divider"></div>
-                        <div class="info-row">
-                            <div class="info-icon">⏰</div>
-                            <div class="text-group">
-                                <span class="info-label">시험시간</span>
-                                <span class="info-value">30분 (오후 6:00 ~ 오후 6:30)</span>
+    
+                        <div class="materials-card">
+                            <!-- Class Materials -->
+                            <div class="info-row">
+                                <div class="info-icon">📂</div>
+                                <div class="text-group">
+                                    <span class="info-label">수업 전 배부</span>
+                                    <ul class="auto-bullet-list">
+                                        <li>수업 안내서</li>
+                                        <li>이동선 모의고사 __회</li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="materials-card">
-                        <!-- Class Materials -->
-                        <div class="info-row">
-                            <div class="info-icon">📂</div>
-                            <div class="text-group">
-                                <span class="info-label">수업 전 배부</span>
-                                <div class="material-list-item">• 수업 안내서</div>
-                                <div class="material-list-item">• 이동선 모의고사 __회</div>
-                            </div>
-                        </div>
-
-                        <div class="card-divider"></div>
-
-                        <!-- Post Exam Materials -->
-                        <div class="info-row">
-                            <div class="info-icon">🎁</div>
-                            <div class="text-group">
-                                <span class="info-label">시험 후 배부</span>
-                                <div class="material-list-item">• 딥러닝</div>
+    
+                            <div class="card-divider"></div>
+    
+                            <!-- Post Exam Materials -->
+                            <div class="info-row">
+                                <div class="info-icon">🎁</div>
+                                <div class="text-group">
+                                    <span class="info-label">시험 후 배부</span>
+                                    <ul class="auto-bullet-list">
+                                        <li>딥러닝</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                 `;
                 noticeBoard.innerHTML = defaultContent;
-                localStorage.setItem('timer_notices_v6', defaultContent);
+                localStorage.setItem('timer_notices_v8', defaultContent);
+            }
+        });
+    }
+
+    // Fullscreen Toggle
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    if (fullscreenBtn) {
+        fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
             }
         });
     }

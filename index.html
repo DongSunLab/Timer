@@ -16,61 +16,65 @@
         <!-- Left Panel: Notices -->
         <section class="panel left-panel">
             <div class="glass-card">
-                <div class="header">
-                    <h2>공지사항</h2>
-                    <div style="display: flex; gap: 10px; align-items: center;">
-                        <button id="resetNoticeBtn" class="icon-btn" title="멘트 초기화"
-                            style="background: none; border: none; cursor: pointer; color: var(--text-secondary);">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74-2.74L3 12" />
-                                <path d="M3 3v9h9" />
-                            </svg>
-                        </button>
-                        <span class="pulse-icon"></span>
-                    </div>
+                <div class="card-controls"
+                    style="position: absolute; top: 1.5rem; right: 1.5rem; z-index: 10; display: flex; gap: 10px; align-items: center;">
+                    <button id="resetNoticeBtn" class="icon-btn" title="멘트 초기화"
+                        style="background: none; border: none; cursor: pointer; color: var(--text-secondary);">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74-2.74L3 12" />
+                            <path d="M3 3v9h9" />
+                        </svg>
+                    </button>
+                    <span class="pulse-icon"></span>
                 </div>
                 <div class="notice-content" contenteditable="true" id="noticeBoard" spellcheck="false">
                     <p class="main-title">2027 이동선T 미적분 정규반</p>
                     <p class="sub-title">시즌1 2주차</p>
 
-                    <div class="exam-card">
-                        <div class="info-row">
-                            <div class="info-icon">📝</div>
-                            <div class="text-group">
-                                <span class="info-label">시험명</span>
-                                <span class="info-value">미적분 TEST 1주차</span>
+                    <div class="cards-row">
+                        <div class="exam-card">
+                            <div class="info-row">
+                                <div class="info-icon">📝</div>
+                                <div class="text-group">
+                                    <span class="info-label">시험명</span>
+                                    <span class="info-value">미적분 TEST 1주차</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card-divider"></div>
-                        <div class="info-row">
-                            <div class="info-icon">⏰</div>
-                            <div class="text-group">
-                                <span class="info-label">시험시간</span>
-                                <span class="info-value">30분 (오후 6:00 ~ 오후 6:30)</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="materials-card">
-                        <!-- Class Materials -->
-                        <div class="info-row">
-                            <div class="info-icon">📂</div>
-                            <div class="text-group">
-                                <span class="info-label">수업 전 배부</span>
-                                <div class="material-list-item">• 수업 안내서</div>
-                                <div class="material-list-item">• 이동선 모의고사 __회</div>
+                            <div class="card-divider"></div>
+                            <div class="info-row">
+                                <div class="info-icon">⏰</div>
+                                <div class="text-group">
+                                    <span class="info-label">시험시간</span>
+                                    <span class="info-value">30분 (오후 6:00 ~ 오후 6:30)</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="card-divider"></div>
+                        <div class="materials-card">
+                            <!-- Class Materials -->
+                            <div class="info-row">
+                                <div class="info-icon">📂</div>
+                                <div class="text-group">
+                                    <span class="info-label">수업 전 배부</span>
+                                    <ul class="auto-bullet-list">
+                                        <li>수업 안내서</li>
+                                        <li>이동선 모의고사 __회</li>
+                                    </ul>
+                                </div>
+                            </div>
 
-                        <!-- Post Exam Materials -->
-                        <div class="info-row">
-                            <div class="info-icon">🎁</div>
-                            <div class="text-group">
-                                <span class="info-label">시험 후 배부</span>
-                                <div class="material-list-item">• 딥러닝</div>
+                            <div class="card-divider"></div>
+
+                            <!-- Post Exam Materials -->
+                            <div class="info-row">
+                                <div class="info-icon">🎁</div>
+                                <div class="text-group">
+                                    <span class="info-label">시험 후 배부</span>
+                                    <ul class="auto-bullet-list">
+                                        <li>딥러닝</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -101,6 +105,13 @@
                     </div>
                     <button id="startBtn" class="btn primary">시작</button>
                     <button id="resetBtn" class="btn secondary">리셋</button>
+                    <button id="fullscreenBtn" class="btn secondary" title="전체화면" style="padding: 0.8rem;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </section>
