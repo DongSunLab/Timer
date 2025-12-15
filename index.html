@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>타이머 및 공지사항</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Left Panel: Notices -->
+        <section class="panel left-panel">
+            <div class="glass-card">
+                <div class="header">
+                    <h2>공지사항</h2>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <button id="resetNoticeBtn" class="icon-btn" title="멘트 초기화"
+                            style="background: none; border: none; cursor: pointer; color: var(--text-secondary);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74-2.74L3 12" />
+                                <path d="M3 3v9h9" />
+                            </svg>
+                        </button>
+                        <span class="pulse-icon"></span>
+                    </div>
+                </div>
+                <div class="notice-content" contenteditable="true" id="noticeBoard" spellcheck="false">
+                    <p class="main-title">2027 이동선T 미적분 정규반</p>
+                    <p class="sub-title">시즌1 2주차</p>
+
+                    <div class="exam-card">
+                        <div class="info-row">
+                            <div class="info-icon">📝</div>
+                            <div class="text-group">
+                                <span class="info-label">시험명</span>
+                                <span class="info-value">미적분 TEST 1주차</span>
+                            </div>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="info-row">
+                            <div class="info-icon">⏰</div>
+                            <div class="text-group">
+                                <span class="info-label">시험시간</span>
+                                <span class="info-value">30분 (오후 6:00 ~ 오후 6:30)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="materials-card">
+                        <!-- Class Materials -->
+                        <div class="info-row">
+                            <div class="info-icon">📂</div>
+                            <div class="text-group">
+                                <span class="info-label">수업 전 배부</span>
+                                <div class="material-list-item">• 수업 안내서</div>
+                                <div class="material-list-item">• 이동선 모의고사 __회</div>
+                            </div>
+                        </div>
+
+                        <div class="card-divider"></div>
+
+                        <!-- Post Exam Materials -->
+                        <div class="info-row">
+                            <div class="info-icon">🎁</div>
+                            <div class="text-group">
+                                <span class="info-label">시험 후 배부</span>
+                                <div class="material-list-item">• 딥러닝</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Panel: Circular Timer -->
+        <section class="panel right-panel">
+            <div class="timer-container">
+                <div class="circle-timer">
+                    <svg class="progress-ring" width="400" height="400">
+                        <circle class="progress-ring__circle-bg" stroke="rgba(255,255,255,0.1)" stroke-width="12"
+                            fill="transparent" r="180" cx="200" cy="200" />
+                        <circle class="progress-ring__circle" stroke="#00d2ff" stroke-width="12" fill="transparent"
+                            r="180" cx="200" cy="200" />
+                    </svg>
+                    <div class="timer-text">
+                        <div id="timeLeft">00:00</div>
+                        <div class="status-text" id="statusText">Ready</div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <div class="input-group">
+                        <input type="number" id="timeInput" placeholder="분" min="1" max="180">
+                        <span>분</span>
+                    </div>
+                    <button id="startBtn" class="btn primary">시작</button>
+                    <button id="resetBtn" class="btn secondary">리셋</button>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
