@@ -412,7 +412,7 @@ html {
 }
 
 .material-list-item {
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     color: var(--text-primary);
     font-weight: 700;
     margin-top: 0.2rem;
@@ -457,4 +457,5 @@ html {
     border-radius: 4px;
 
 }
+
 
