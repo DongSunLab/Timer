@@ -286,7 +286,7 @@ html {
 }
 
 .sub-title {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     color: var(--accent-color);
     font-weight: 600;
     margin-bottom: 2.5rem !important;
@@ -366,7 +366,7 @@ html {
 }
 
 .info-value {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     font-weight: 700;
     color: var(--text-primary);
 }
@@ -412,7 +412,7 @@ html {
 }
 
 .material-list-item {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     color: var(--text-primary);
     font-weight: 700;
     margin-top: 0.2rem;
@@ -427,7 +427,7 @@ html {
 }
 
 .auto-bullet-list li {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     font-weight: 700;
     color: var(--text-primary);
     line-height: 1.3;
@@ -457,6 +457,7 @@ html {
     border-radius: 4px;
 
 }
+
 
 
 
