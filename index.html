@@ -4,118 +4,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>타이머 및 공지사항</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>이동선T 시험 타이머</title>
+    <link rel="preload" href="fonts/PretendardVariable.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div class="container">
-        <!-- Left Panel: Notices -->
-        <section class="panel left-panel">
-            <div class="glass-card">
-                <div class="card-controls"
-                    style="position: absolute; top: 1.5rem; right: 1.5rem; z-index: 10; display: flex; gap: 10px; align-items: center;">
-                    <button id="resetNoticeBtn" class="icon-btn" title="멘트 초기화"
-                        style="background: none; border: none; cursor: pointer; color: var(--text-secondary);">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74-2.74L3 12" />
-                            <path d="M3 3v9h9" />
-                        </svg>
-                    </button>
-                    <span class="pulse-icon"></span>
+    <!-- 마스크 윤곽: 2028 ALGORITHM 교재 상단 마스크에서 뽑은 모서리·노치(원본 px 단위) -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="mask-corner" viewBox="0 0 260 472">
+            <path d="M0 0H260V77L243 77.4 236 78.1 228 79.3 222 80.5 210 83.4 201 86.2 195 88.3 183 93.3 173 98.3 166 102.3 161 105.4 151 112.2 141 120.1 131 129.3 126 134.4 121 139.9 113 149.8 106 159.8 99 171.4 93 183.2 90 190.1 87 197.8 84 206.8 82 213.9 80 222.4 79 227.5 78 233.7 77 242.3 77 472H0Z" />
+        </symbol>
+        <symbol id="mask-notch" viewBox="0 0 736 154">
+            <path d="M0 0V77L36 77 42 77.5 53 79.2 59 80.5 68 83.1 76 86.2 90 93.4 96 97.7 100 101.5 106 108.4 110 113.8 121 130.1 127 136.9 132 141.1 137 144.3 143 147.3 148 149.3 158 151.7 168 153 172 153 185 154 220 154 516 154 551 154 564 153 568 153 578 151.7 588 149.3 593 147.3 599 144.3 604 141.1 609 136.9 615 130.1 626 113.8 630 108.4 636 101.5 640 97.7 646 93.4 660 86.2 668 83.1 677 80.5 683 79.2 694 77.5 700 77L736 77V0Z" />
+        </symbol>
+    </svg>
+
+    <div class="frame" aria-hidden="true">
+        <div class="band band-top"></div>
+        <div class="band band-bottom"></div>
+        <svg class="corner corner-tl"><use href="#mask-corner" /></svg>
+        <svg class="corner corner-tr"><use href="#mask-corner" /></svg>
+        <svg class="corner corner-bl"><use href="#mask-corner" /></svg>
+        <svg class="corner corner-br"><use href="#mask-corner" /></svg>
+        <svg class="notch"><use href="#mask-notch" /></svg>
+    </div>
+
+    <!-- 노치 안: 현재 시각 -->
+    <div class="clock" id="clock" title="현재 시각"></div>
+
+    <main class="spread">
+        <!-- 왼쪽 면: 수업 안내(글자를 눌러 바로 고친다) -->
+        <section class="page page-notice" id="noticeBoard">
+            <!-- 제목 줄: 고정 문구이고, 아랫변을 위 마스크가 끝나는 높이에 고정한다 -->
+            <header class="notice-head">
+            <h1 class="title">2028 <span class="bold">이동선T</span> 정규반</h1>
+            <p class="subtitle">
+                <span class="pick">
+                    <button type="button" class="subject" id="subjectBtn" aria-haspopup="listbox"
+                        aria-expanded="false" title="과목 고르기">대수</button>
+                    <span class="pick-menu" id="subjectMenu" role="listbox" hidden></span>
+                </span>
+                <span class="pick">
+                    <button type="button" class="week" id="weekBtn" aria-haspopup="listbox"
+                        aria-expanded="false" title="주차 고르기">2주차</button>
+                    <span class="pick-menu week-menu" id="weekMenu" role="listbox" hidden></span>
+                </span>
+                <!-- 누적 주차(대수 → 미적분Ⅰ → 확률과 통계 순서로 이어 센다) -->
+                <span class="total" id="totalWeek"></span>
+            </p>
+            </header>
+
+            <div class="notice-body" id="noticeBody">
+            <div class="notice-inner" id="noticeInner">
+            <div class="box">
+                <!-- 시험명: 과목과 주차는 고르고 TEST는 고정이다 -->
+                <div class="row">
+                    <span class="row-label">시험명</span>
+                    <div class="row-value fixed exam-name" id="examName">
+                        <span class="pick">
+                            <button type="button" id="examSubjectBtn" aria-haspopup="listbox" aria-expanded="false"
+                                title="시험 과목 고르기">대수</button>
+                            <span class="pick-menu" id="examSubjectMenu" role="listbox" hidden></span>
+                        </span>
+                        <span class="pick">
+                            <button type="button" id="examWeekBtn" aria-haspopup="listbox" aria-expanded="false"
+                                title="시험 주차 고르기">1주차</button>
+                            <span class="pick-menu week-menu" id="examWeekMenu" role="listbox" hidden></span>
+                        </span>
+                        <span>TEST</span>
+                    </div>
                 </div>
-                <div class="notice-content" contenteditable="true" id="noticeBoard" spellcheck="false">
-                    <p class="main-title">2027 이동선T 미적분 정규반</p>
-                    <p class="sub-title">시즌1 2주차</p>
-
-                    <div class="cards-row">
-                        <div class="exam-card">
-                            <div class="info-row">
-                                <div class="info-icon">📝</div>
-                                <div class="text-group">
-                                    <span class="info-label">시험명</span>
-                                    <span class="info-value">미적분 TEST 1주차</span>
-                                </div>
-                            </div>
-                            <div class="card-divider"></div>
-                            <div class="info-row">
-                                <div class="info-icon">⏰</div>
-                                <div class="text-group">
-                                    <span class="info-label">시험시간</span>
-                                    <span class="info-value">30분 (오후 6:00 ~ 오후 6:30)</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="materials-card">
-                            <!-- Class Materials -->
-                            <div class="info-row">
-                                <div class="info-icon">📂</div>
-                                <div class="text-group">
-                                    <span class="info-label">수업 전 배부</span>
-                                    <ul class="auto-bullet-list">
-                                        <li>수업 안내서</li>
-                                        <li>이동선 모의고사 __회</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="card-divider"></div>
-
-                            <!-- Post Exam Materials -->
-                            <div class="info-row">
-                                <div class="info-icon">🎁</div>
-                                <div class="text-group">
-                                    <span class="info-label">시험 후 배부</span>
-                                    <ul class="auto-bullet-list">
-                                        <li>딥러닝</li>
-                                    </ul>
-                                </div>
-                            </div>
+                <!-- 시험 시간: 분은 적고, 시작 시각은 고른다. 끝나는 시각은 자동이다 -->
+                <div class="row">
+                    <span class="row-label">시험 시간</span>
+                    <div class="row-value fixed-lines">
+                        <div class="fixed"><span data-field="examMinutes" data-single data-digits
+                                data-placeholder="0">30</span><span>분</span></div>
+                        <div class="fixed">
+                            <span class="pick">
+                                <button type="button" id="examStartBtn" aria-haspopup="dialog" aria-expanded="false"
+                                    title="시작 시각 고르기">오후 6:00</button>
+                                <span class="pick-menu time-menu" id="examStartMenu" hidden></span>
+                            </span>
+                            <span>~</span>
+                            <span id="examEnd">오후 6:30</span>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- 배부 자료: 시험 전 · 수업 전 · 수업 후. 줄은 script.js가 만든다(+ 로 더하고 × 로 뺀다) -->
+            <h2 class="section-title">배부 자료</h2>
+            <div class="box" id="materials"></div>
+            </div>
+            </div>
         </section>
 
-        <!-- Right Panel: Circular Timer -->
-        <section class="panel right-panel">
-            <div class="timer-container">
-                <div class="circle-timer">
-                    <svg class="progress-ring" width="400" height="400">
-                        <circle class="progress-ring__circle-bg" stroke="rgba(255,255,255,0.1)" stroke-width="12"
-                            fill="transparent" r="180" cx="200" cy="200" />
-                        <circle class="progress-ring__circle" stroke="#00d2ff" stroke-width="12" fill="transparent"
-                            r="180" cx="200" cy="200" />
-                    </svg>
-                    <div class="timer-text">
-                        <div id="timeLeft">00:00</div>
-                        <div class="status-text" id="statusText">Ready</div>
+        <!-- 오른쪽 면: 타이머 -->
+        <section class="page page-timer">
+            <button id="resetNoticeBtn" class="tool-btn" title="안내 문구 초기화" aria-label="안내 문구 초기화">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
+                    <path d="M3 3v5h5" />
+                </svg>
+            </button>
+            <div class="timer">
+                <div class="status" id="statusText">시작 전</div>
+                <div class="time-left" id="timeLeft">00:00</div>
+
+                <div class="timeline">
+                    <div class="axis">
+                        <div class="axis-end"><span class="axis-cap">시작</span><span id="startAt"></span></div>
+                        <div class="axis-end"><span class="axis-cap">종료</span><span id="endAt"></span></div>
+                    </div>
+                    <div class="bar">
+                        <div class="bar-fill" id="barFill"></div>
                     </div>
                 </div>
 
                 <div class="controls">
-                    <div class="input-group">
-                        <input type="number" id="timeInput" placeholder="분" min="1" max="180">
+                    <label class="minutes">
+                        <input type="number" id="timeInput" inputmode="numeric" placeholder="0" min="1" max="999"
+                            aria-label="시험 시간(분)">
                         <span>분</span>
-                    </div>
-                    <button id="startBtn" class="btn primary">시작</button>
-                    <button id="resetBtn" class="btn secondary">리셋</button>
-                    <button id="fullscreenBtn" class="btn secondary" title="전체화면" style="padding: 0.8rem;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path
-                                d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+                    </label>
+                    <button id="startBtn" class="btn btn-primary">시작</button>
+                    <button id="resetBtn" class="btn">리셋</button>
+                    <button id="fullscreenBtn" class="btn btn-icon" title="전체 화면" aria-label="전체 화면">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
                         </svg>
                     </button>
                 </div>
             </div>
         </section>
-    </div>
+    </main>
+
     <script src="script.js"></script>
 </body>
 
