@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const examStartMenu = $('examStartMenu');
     const examEnd = $('examEnd');
     const materialsBox = $('materials');
+    const specialNotesField = $('specialNotes');
     const minutesField = document.querySelector('[data-field="examMinutes"]');
 
     // ─────────────────────────────────────────────
@@ -46,11 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
     const TOTAL_WEEKS = 8 + 8 + 7;
 
-    // 배부 자료의 분류와 항목 종류
-    const SLOTS = [
-        ['examBefore', '시험 전'],
-        ['classBefore', '시험 후'],
-    ];
+    // 배부 자료의 항목 종류
     const MATERIAL_TYPES = [
         ['algorithm', 'ALGORITHM'],             // ALGORITHM (과목) (상/중/하)
         ['deep', 'DEEP LEARNING'],              // DEEP LEARNING (과목) (n주차)
@@ -67,17 +64,14 @@ document.addEventListener('DOMContentLoaded', () => {
         examSubject: '대수',    // 시험 과목
         examWeek: 1,            // 시험 주차
         startMin: 18 * 60,      // 시험 시작 시각(자정부터 분) = 오후 6:00
+        specialNotes: '',
     };
-    const DEFAULT_MATERIALS = {
-        examBefore: [],
-        classBefore: [
-            { type: 'text', text: '수업 안내서' },
-            { type: 'mock', round: '1' },
-        ],
-    };
+    const DEFAULT_MATERIALS = [
+        { type: 'text', text: '수업 안내서' },
+        { type: 'mock', round: '1' },
+    ];
     const defaultMinutes = minutesField.textContent;
-    const copy = value => JSON.parse(JSON.stringify(value));
-    let choice = { ...DEFAULT_CHOICES, materials: copy(DEFAULT_MATERIALS) };
+    let choice;
 
     const infoOf = name => SUBJECTS.find(item => item.name === name) || SUBJECTS[0];
     const clamp = (value, low, high) => Math.min(high, Math.max(low, parseInt(value, 10) || low));
@@ -341,26 +335,21 @@ document.addEventListener('DOMContentLoaded', () => {
         return { type: 'text', text: '' };
     }
 
-    // 저장된 값에서 쓸 수 있는 줄만 추린다
+    // 이전에 저장한 시험 전·후 자료는 표시 순서대로 합친다.
     function cleanMaterials(saved) {
-        const result = {};
-        SLOTS.forEach(([key]) => {
-            const list = saved && Array.isArray(saved[key]) ? saved[key] : null;
-            if (!list) {
-                result[key] = copy(DEFAULT_MATERIALS[key]);
-                return;
+        const list = Array.isArray(saved) ? saved : [
+            ...(Array.isArray(saved?.examBefore) ? saved.examBefore : []),
+            ...(Array.isArray(saved?.classBefore) ? saved.classBefore : DEFAULT_MATERIALS),
+        ];
+        return list.filter(item => item && MATERIAL_TYPES.some(([type]) => type === item.type)).map(item => {
+            const subject = infoOf(item.subject).name;
+            if (item.type === 'algorithm') {
+                return { type: 'algorithm', subject, level: LEVELS.includes(item.level) ? item.level : LEVELS[0] };
             }
-            result[key] = list.filter(item => item && MATERIAL_TYPES.some(([type]) => type === item.type)).map(item => {
-                const subject = infoOf(item.subject).name;
-                if (item.type === 'algorithm') {
-                    return { type: 'algorithm', subject, level: LEVELS.includes(item.level) ? item.level : LEVELS[0] };
-                }
-                if (item.type === 'deep') return { type: 'deep', subject, week: clamp(item.week, 1, infoOf(subject).count) };
-                if (item.type === 'mock') return { type: 'mock', round: String(item.round ?? '').replace(/\D/g, '') };
-                return { type: 'text', text: String(item.text ?? '') };
-            });
+            if (item.type === 'deep') return { type: 'deep', subject, week: clamp(item.week, 1, infoOf(subject).count) };
+            if (item.type === 'mock') return { type: 'mock', round: String(item.round ?? '').replace(/\D/g, '') };
+            return { type: 'text', text: String(item.text ?? '') };
         });
-        return result;
     }
 
     let focusItem = null;   // 방금 더한 '직접 입력' 줄(그린 뒤 바로 적을 수 있게)
@@ -450,25 +439,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderMaterials() {
-        materialsBox.replaceChildren(...SLOTS.map(([key, label]) => {
-            const list = choice.materials[key];
-            const row = make('div', 'row');
-            const value = make('div', 'row-value items');
-            value.append(...list.map(item => materialLine(list, item)));
-            const add = makePick('+', '', MATERIAL_TYPES.map(([type, name]) => ({
-                label: name,
-                onPick: () => {
-                    const item = newMaterial(type);
-                    list.push(item);
-                    focusItem = type === 'text' ? item : null;   // 빈 직접 입력 줄만 바로 적게 한다
-                },
-            })));
-            add.classList.add('add');
-            add.querySelector('button').title = `${label} 자료 더하기`;
-            add.querySelector('button').setAttribute('aria-label', `${label} 자료 더하기`);
-            row.append(make('span', 'row-label', label), value, add);
-            return row;
-        }));
+        const list = choice.materials;
+        const value = make('div', 'row-value items');
+        value.append(...list.map(item => materialLine(list, item)));
+        const add = makePick('+', '', MATERIAL_TYPES.map(([type, label]) => ({
+            label,
+            onPick: () => {
+                const item = newMaterial(type);
+                list.push(item);
+                focusItem = type === 'text' ? item : null;   // 빈 직접 입력 줄만 바로 적게 한다
+            },
+        })));
+        add.classList.add('add');
+        const addButton = add.querySelector('button');
+        addButton.title = '배부 자료 더하기';
+        addButton.setAttribute('aria-label', addButton.title);
+        materialsBox.replaceChildren(value, add);
         focusItem = null;
         fitNotice();
     }
@@ -504,6 +490,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (typeof saved[key] === typeof DEFAULT_CHOICES[key]) choice[key] = saved[key];
         });
         choice.materials = cleanMaterials(saved.materials);
+        if (specialNotesField) specialNotesField.textContent = choice.specialNotes;
         renderNotice();
         renderMaterials();
     }
@@ -526,10 +513,21 @@ document.addEventListener('DOMContentLoaded', () => {
         },
     });
 
+    if (specialNotesField) {
+        makeEditable(specialNotesField, {
+            onInput: value => {
+                choice.specialNotes = value;
+                fitNotice();
+                saveNotice();
+            },
+        });
+    }
+
     resetNoticeBtn.addEventListener('click', () => {
         if (!confirm('안내 문구를 처음 문구로 되돌리시겠습니까?')) return;
         minutesField.textContent = defaultMinutes;
-        choice = { ...DEFAULT_CHOICES, materials: copy(DEFAULT_MATERIALS) };
+        choice = { ...DEFAULT_CHOICES, materials: cleanMaterials() };
+        if (specialNotesField) specialNotesField.textContent = choice.specialNotes;
         renderNotice();
         renderMaterials();
         saveNotice();

@@ -360,11 +360,14 @@ input {
 .fixed > [data-field] + span { margin-left: -0.26em; }   /* '30' 바로 뒤에 '분' */
 
 /* ── 배부 자료 ── */
-.row { position: relative; }
+#materials {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    column-gap: calc(var(--u) * 0.7);
+}
 
 .items {
     min-height: 1.32em;
-    padding-right: calc(var(--u) * 2.6);   /* + 단추 자리 */
     white-space: normal;
 }
 
@@ -411,9 +414,7 @@ input {
 
 /* 줄 더하기 */
 .pick.add {
-    position: absolute;
-    top: calc(var(--u) * 0.5);
-    right: 0;
+    margin-top: calc(var(--u) * 0.5);
 }
 
 .pick.add > button {
@@ -441,6 +442,11 @@ input {
 .pick.add .pick-menu {
     left: auto;
     right: 0;
+}
+
+.special-notes {
+    min-height: 1.32em;
+    overflow-wrap: anywhere;
 }
 
 /* 시험명: 과목은 과목색으로 굵게, 주차와 TEST는 검정으로 가늘게 */
