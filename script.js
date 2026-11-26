@@ -29,7 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const examStartMenu = $('examStartMenu');
     const examEnd = $('examEnd');
     const materialsBox = $('materials');
-    const specialNotesField = $('specialNotes');
     const minutesField = document.querySelector('[data-field="examMinutes"]');
 
     // ─────────────────────────────────────────────
@@ -64,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
         examSubject: '대수',    // 시험 과목
         examWeek: 1,            // 시험 주차
         startMin: 18 * 60,      // 시험 시작 시각(자정부터 분) = 오후 6:00
-        specialNotes: '',
     };
     const DEFAULT_MATERIALS = [
         { type: 'text', text: '수업 안내서' },
@@ -490,7 +488,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (typeof saved[key] === typeof DEFAULT_CHOICES[key]) choice[key] = saved[key];
         });
         choice.materials = cleanMaterials(saved.materials);
-        if (specialNotesField) specialNotesField.textContent = choice.specialNotes;
         renderNotice();
         renderMaterials();
     }
@@ -513,21 +510,10 @@ document.addEventListener('DOMContentLoaded', () => {
         },
     });
 
-    if (specialNotesField) {
-        makeEditable(specialNotesField, {
-            onInput: value => {
-                choice.specialNotes = value;
-                fitNotice();
-                saveNotice();
-            },
-        });
-    }
-
     resetNoticeBtn.addEventListener('click', () => {
         if (!confirm('안내 문구를 처음 문구로 되돌리시겠습니까?')) return;
         minutesField.textContent = defaultMinutes;
         choice = { ...DEFAULT_CHOICES, materials: cleanMaterials() };
-        if (specialNotesField) specialNotesField.textContent = choice.specialNotes;
         renderNotice();
         renderMaterials();
         saveNotice();

@@ -444,11 +444,6 @@ input {
     right: 0;
 }
 
-.special-notes {
-    min-height: 1.32em;
-    overflow-wrap: anywhere;
-}
-
 /* 시험명: 과목은 과목색으로 굵게, 주차와 TEST는 검정으로 가늘게 */
 .exam-name { font-weight: 400; }
 .exam-name #examSubjectBtn { font-weight: 700; }
