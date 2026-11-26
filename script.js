@@ -49,8 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 배부 자료의 분류와 항목 종류
     const SLOTS = [
         ['examBefore', '시험 전'],
-        ['classBefore', '수업 전'],
-        ['classAfter', '수업 후'],
+        ['classBefore', '시험 후'],
     ];
     const MATERIAL_TYPES = [
         ['algorithm', 'ALGORITHM'],             // ALGORITHM (과목) (상/중/하)
@@ -74,9 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
         classBefore: [
             { type: 'text', text: '수업 안내서' },
             { type: 'mock', round: '1' },
-        ],
-        classAfter: [
-            { type: 'deep', subject: '대수', week: 2 },
         ],
     };
     const defaultMinutes = minutesField.textContent;
